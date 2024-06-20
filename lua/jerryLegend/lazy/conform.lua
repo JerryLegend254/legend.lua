@@ -11,7 +11,6 @@ return {
                 typescriptreact = { { "prettierd", "prettier" } },
                 html = { { "prettierd", "prettier" } },
                 php = { { "tlint" } },
-                json = { { "prettierd", "prettier" } },
             },
             format_on_save = {
 
