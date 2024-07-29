@@ -11,6 +11,7 @@ return {
                 typescriptreact = { { "prettierd", "prettier" } },
                 html = { { "prettierd", "prettier" } },
                 php = { { "tlint" } },
+                templ = { { "templ" } },
             },
             format_on_save = {
 

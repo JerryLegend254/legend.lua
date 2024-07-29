@@ -6,7 +6,7 @@ return {
             -- A list of parser names, or "all"
             ensure_installed = {
                 "vimdoc", "javascript", "typescript", "c", "lua", "rust",
-                "jsdoc", "bash", "json", "yaml", "html", "css", "scss", "jsonc", "go"
+                "jsdoc", "bash", "json", "yaml", "html", "css", "scss", "jsonc", "go", "vim", "query"
             },
 
             -- Install parsers synchronously (only applied to `ensure_installed`)
@@ -29,6 +29,12 @@ return {
                 -- Using this option may slow down your editor, and you may see some duplicate highlights.
                 -- Instead of true it can also be a list of languages
                 additional_vim_regex_highlighting = false,
+            },
+            incremental_selection = {
+                enable = true,
+                keymaps = {
+                    init_selection = "ts", -- set to `false` to disable one of the mappings
+                }
             },
         })
 
