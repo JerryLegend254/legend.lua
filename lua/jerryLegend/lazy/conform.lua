@@ -11,7 +11,8 @@ return {
                 typescriptreact = { { "prettierd", "prettier" } },
                 html = { { "prettierd", "prettier" } },
                 php = { { "tlint" } },
-                templ = { { "templ" } },
+                templ = { { "templ", "gofumpt" } },
+                tmpl = { { "templ", "gofumpt" } },
             },
             format_on_save = {
 
@@ -19,6 +20,9 @@ return {
                 lsp_fallback = true,
             }
 
+        })
+        conform.format({
+            lsp_format = "first"
         })
         vim.keymap.set({ "n", "v" }, "<leader>l", function()
             conform.format({

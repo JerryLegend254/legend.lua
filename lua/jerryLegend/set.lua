@@ -30,3 +30,8 @@ vim.opt.updatetime = 50
 
 vim.opt.colorcolumn = "300"
 vim.opt.mouse = ""
+vim.filetype.add({
+    extension = {
+        tmpl = "templ",
+    }
+})

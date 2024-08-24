@@ -43,18 +43,16 @@ vim.keymap.set(
 
 vim.keymap.set("n", "<leader>mr", "<cmd>CellularAutomaton make_it_rain<CR>");
 
-vim.keymap.set("n", "<leader><leader>", function()
-    vim.cmd("so")
-end)
-
 vim.keymap.set("n", "<leader>giu", function()
     vim.cmd("%!goimports")
 end)
+
+vim.keymap.set("n", "<leader><leader>", ":so %<CR>")
 
 vim.keymap.set("n", "<c-k>", ":wincmd k<CR>")
 vim.keymap.set("n", "<c-j>", ":wincmd j<CR>")
 vim.keymap.set("n", "<c-h>", ":wincmd h<CR>")
 vim.keymap.set("n", "<c-l>", ":wincmd l<CR>")
 
-vim.keymap.set("i", "<leader><c-j>", "<Esc>")
+vim.keymap.set({ "i", "v" }, "<leader><c-j>", "<Esc>")
 vim.keymap.set("n", "<leader>q", "<cmd>q<CR>")
