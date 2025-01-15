@@ -11,9 +11,7 @@ return {
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
         "j-hui/fidget.nvim",
-        "github/copilot.vim" -- Add the Copilot plugin
     },
-
     config = function()
         local cmp = require('cmp')
         local cmp_lsp = require("cmp_nvim_lsp")
@@ -22,7 +20,6 @@ return {
             {},
             vim.lsp.protocol.make_client_capabilities(),
             cmp_lsp.default_capabilities())
-
         require("fidget").setup({})
         require("mason").setup()
         require("mason-lspconfig").setup({
@@ -30,6 +27,7 @@ return {
                 "lua_ls",
                 "rust_analyzer",
                 "gopls",
+                "tsserver", -- Add TypeScript server to ensure_installed
             },
             handlers = {
                 function(server_name) -- default handler (optional)
@@ -37,7 +35,6 @@ return {
                         capabilities = capabilities
                     }
                 end,
-
                 ["lua_ls"] = function()
                     local lspconfig = require("lspconfig")
                     lspconfig.lua_ls.setup {
@@ -52,11 +49,24 @@ return {
                         }
                     }
                 end,
+                ["tsserver"] = function()
+                    local lspconfig = require("lspconfig")
+                    lspconfig.tsserver.setup({
+                        capabilities = capabilities,
+                        filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
+                        init_options = {
+                            plugins = {
+                                {
+                                    name = "@styled/typescript-styled-plugin",
+                                    location = "node_modules/@styled/typescript-styled-plugin"
+                                }
+                            }
+                        }
+                    })
+                end,
             }
         })
-
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
-
         cmp.setup({
             snippet = {
                 expand = function(args)
@@ -76,9 +86,7 @@ return {
                 { name = 'buffer' },
             })
         })
-
         vim.diagnostic.config({
-            -- update_in_insert = true,
             float = {
                 focusable = false,
                 style = "minimal",
@@ -88,9 +96,8 @@ return {
                 prefix = "",
             },
         })
-
         -- Copilot configuration
-        vim.g.copilot_no_tab_map = true
-        vim.api.nvim_set_keymap("i", "<Tab>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+        -- vim.g.copilot_no_tab_map = true
+        -- vim.api.nvim_set_keymap("i", "<Tab>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
     end
 }

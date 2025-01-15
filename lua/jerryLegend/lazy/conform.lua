@@ -13,6 +13,7 @@ return {
                 php = { { "tlint" } },
                 templ = { { "templ", "gofumpt" } },
                 tmpl = { { "templ", "gofumpt" } },
+                proto = { { "buf" } },
             },
             format_on_save = {
 

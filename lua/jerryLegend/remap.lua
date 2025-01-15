@@ -47,6 +47,10 @@ vim.keymap.set("n", "<leader>giu", function()
     vim.cmd("%!goimports")
 end)
 
+vim.keymap.set("n", "<leader>js", function()
+    vim.cmd("%!jq .")
+end)
+
 vim.keymap.set("n", "<leader><leader>", ":so %<CR>")
 
 vim.keymap.set("n", "<c-k>", ":wincmd k<CR>")

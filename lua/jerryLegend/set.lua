@@ -35,3 +35,7 @@ vim.filetype.add({
         tmpl = "templ",
     }
 })
+
+vim.cmd([[
+  autocmd BufNewFile,BufRead *.tsx,*.ts set filetype=typescriptreact
+]])
