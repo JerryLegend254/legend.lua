@@ -8,6 +8,7 @@ return {
             "marilari88/neotest-vitest",
             "nvim-neotest/neotest-plenary",
             "nvim-neotest/nvim-nio",
+            "nvim-neotest/neotest-go",
         },
         config = function()
             local neotest = require("neotest")
@@ -19,13 +20,24 @@ return {
                         -- in all my projects
                         min_init = "./scripts/tests/minimal.vim",
                     }),
+                    require("neotest-go")({
+                        experimental = {
+                            test_table = true,
+                        },
+                        args = { "-count=1", "-timeout=60s" }
+                    })
                 }
             })
 
             vim.keymap.set("n", "<leader>tc", function()
                 neotest.run.run()
             end)
+            vim.keymap.set("n", "<leader>tst", function()
+                neotest.summary.toggle()
+            end)
+            vim.keymap.set("n", "<leader>tot", function()
+                neotest.output_panel.toggle()
+            end)
         end,
     },
 }
-

@@ -28,6 +28,7 @@ return {
                 "rust_analyzer",
                 "gopls",
                 "tsserver", -- Add TypeScript server to ensure_installed
+                "clangd",
             },
             handlers = {
                 function(server_name) -- default handler (optional)
@@ -64,6 +65,12 @@ return {
                         }
                     })
                 end,
+                ["clangd"] = function()
+                    local lspconfig = require("lspconfig")
+                    lspconfig.clangd.setup {
+                        capabilities = capabilities,
+                    }
+                end
             }
         })
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
