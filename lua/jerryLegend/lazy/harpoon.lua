@@ -12,14 +12,14 @@ return {
     keys = function()
         local keys = {
             {
-                "<leader>H",
+                "<leader>h",
                 function()
                     require("harpoon"):list():add()
                 end,
                 desc = "Harpoon File",
             },
             {
-                "<leader>h",
+                "<leader>hq",
                 function()
                     local harpoon = require("harpoon")
                     harpoon.ui:toggle_quick_menu(harpoon:list())
@@ -27,7 +27,8 @@ return {
                 desc = "Harpoon Quick Menu",
             },
         }
-
+        vim.keymap.set("n", "<leader>hp", function() require("harpoon"):list():prev() end)
+        vim.keymap.set("n", "<leader>hn", function() require("harpoon"):list():next() end)
         for i = 1, 5 do
             table.insert(keys, {
                 "<leader>" .. i,

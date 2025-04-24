@@ -27,7 +27,7 @@ return {
                 "lua_ls",
                 "rust_analyzer",
                 "gopls",
-                "tsserver", -- Add TypeScript server to ensure_installed
+                "ts_ls",
                 "clangd",
             },
             handlers = {
@@ -50,9 +50,9 @@ return {
                         }
                     }
                 end,
-                ["tsserver"] = function()
+                ["ts_ls"] = function()
                     local lspconfig = require("lspconfig")
-                    lspconfig.tsserver.setup({
+                    lspconfig.ts_ls.setup({
                         capabilities = capabilities,
                         filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
                         init_options = {
@@ -93,16 +93,32 @@ return {
                 { name = 'buffer' },
             })
         })
+
         vim.diagnostic.config({
+            virtual_text = false, -- if you don’t want inline text
+            signs = true,
+            update_in_insert = false,
+            underline = true,
+            severity_sort = true,
             float = {
-                focusable = false,
-                style = "minimal",
-                border = "rounded",
-                source = "always",
-                header = "",
-                prefix = "",
+                show_header = true,
+                source = 'always',
+                border = 'rounded',
             },
         })
+        vim.cmd([[
+  autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
+]])
+        --vim.diagnostic.config({
+        --    float = {
+        --        focusable = false,
+        --        style = "minimal",
+        --        border = "rounded",
+        --        source = "always",
+        --        header = "",
+        --        prefix = "",
+        --    },
+        --})
         -- Copilot configuration
         -- vim.g.copilot_no_tab_map = true
         -- vim.api.nvim_set_keymap("i", "<Tab>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
