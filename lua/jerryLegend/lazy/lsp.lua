@@ -70,7 +70,16 @@ return {
                     lspconfig.clangd.setup {
                         capabilities = capabilities,
                     }
-                end
+                end,
+                require('lspconfig').dartls.setup {
+                    on_attach = function(client, bufnr)
+                        local opts = { noremap = true, silent = true, buffer = bufnr }
+
+                        -- Set <leader>fl to trigger code actions
+                        vim.keymap.set("n", "<leader>fl", vim.lsp.buf.code_action, opts)
+                        vim.keymap.set("v", "<leader>fl", vim.lsp.buf.code_action, opts)
+                    end,
+                }
             }
         })
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
