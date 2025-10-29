@@ -19,7 +19,9 @@ return {
             "force",
             {},
             vim.lsp.protocol.make_client_capabilities(),
-            cmp_lsp.default_capabilities())
+            cmp_lsp.default_capabilities()
+        )
+
         require("fidget").setup({})
         require("mason").setup()
         require("mason-lspconfig").setup({
@@ -82,11 +84,12 @@ return {
                 }
             }
         })
+
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
         cmp.setup({
             snippet = {
                 expand = function(args)
-                    require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+                    require('luasnip').lsp_expand(args.body)
                 end,
             },
             mapping = cmp.mapping.preset.insert({
@@ -97,39 +100,65 @@ return {
             }),
             sources = cmp.config.sources({
                 { name = 'nvim_lsp' },
-                { name = 'luasnip' }, -- For luasnip users.
+                { name = 'luasnip' },
             }, {
                 { name = 'buffer' },
             })
         })
 
+        -- Define diagnostic signs (using current Neovim API style)
+        local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+        for type, icon in pairs(signs) do
+            local hl = "DiagnosticSign" .. type
+            vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+        end
+
         vim.diagnostic.config({
-            virtual_text = false, -- if you don’t want inline text
-            signs = true,
-            update_in_insert = false,
+            virtual_text = false,
             underline = true,
+            update_in_insert = false,
             severity_sort = true,
+            signs = {
+                text = {
+                    [vim.diagnostic.severity.ERROR] = " ",
+                    [vim.diagnostic.severity.WARN]  = " ",
+                    [vim.diagnostic.severity.HINT]  = " ",
+                    [vim.diagnostic.severity.INFO]  = " ",
+                },
+            },
             float = {
                 show_header = true,
-                source = 'always',
-                border = 'rounded',
+                source = "always",
+                border = "rounded",
             },
         })
-        vim.cmd([[
-  autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
-]])
-        --vim.diagnostic.config({
-        --    float = {
-        --        focusable = false,
-        --        style = "minimal",
-        --        border = "rounded",
-        --        source = "always",
-        --        header = "",
-        --        prefix = "",
-        --    },
-        --})
-        -- Copilot configuration
-        -- vim.g.copilot_no_tab_map = true
-        -- vim.api.nvim_set_keymap("i", "<Tab>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+
+        -- Auto show diagnostics float on hover
+        vim.api.nvim_create_autocmd("CursorHold", {
+            callback = function()
+                vim.diagnostic.open_float(nil, {
+                    focusable = false,
+                    close_events = { "CursorMoved", "CursorMovedI", "BufHidden", "InsertCharPre", "BufLeave", "WinLeave" },
+                    border = "rounded",
+                    source = "always",
+                })
+            end,
+        })
+
+        -- Close only the diagnostic float (not signs/underlines) when moving
+        vim.api.nvim_create_autocmd("CursorMoved", {
+            callback = function()
+                for _, winid in ipairs(vim.api.nvim_list_wins()) do
+                    local config = vim.api.nvim_win_get_config(winid)
+                    -- Only close floating diagnostic windows
+                    if config.relative ~= "" and config.zindex ~= nil then
+                        local bufnr = vim.api.nvim_win_get_buf(winid)
+                        if vim.bo[bufnr].filetype == "markdown" or vim.bo[bufnr].filetype == "plaintext" then
+                            pcall(vim.api.nvim_win_close, winid, true)
+                        end
+                    end
+                end
+            end,
+        })
     end
 }

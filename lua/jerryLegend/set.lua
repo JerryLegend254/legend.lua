@@ -35,6 +35,8 @@ vim.filetype.add({
         tmpl = "templ",
     }
 })
+vim.opt.backupcopy = "yes"
+vim.opt.writebackup = false
 
 vim.cmd([[
   autocmd BufNewFile,BufRead *.tsx,*.ts set filetype=typescriptreact
